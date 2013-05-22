@@ -27,7 +27,7 @@ LIBS := $(shell pkg-config --libs pidgin)
 SOURCES := $(wildcard *.c)
 OBJECTS := $(patsubst %.c,%.o,$(SOURCES))
 TARGET := usercast.so
-PLUGINS := /usr/bin/pidgin
+PLUGINS := /usr/lib/pidgin
 
 all: $(TARGET)
 
