@@ -24,7 +24,7 @@
 
 #define USERCAST_PLUGIN_ID      "core-usercast"
 #define USERCAST_PLUGIN_NAME    "usercast"
-#define USERCAST_PLUGIN_VERSION "0.1"
+#define USERCAST_PLUGIN_VERSION "0.0.1"
 
 #include <conversation.h>
 #include <signals.h>
@@ -64,7 +64,7 @@ conversation_nick_clicked(PurpleConversation* conv, gchar* nick, guint button)
         first_click = click_time.tv_sec * 1000 + click_time.tv_usec / 1000;
         g_get_current_time(&click_time);
         second_click = click_time.tv_sec * 1000 + click_time.tv_usec / 1000;
-        
+
         if (second_click - first_click <= double_click_time)
         {
             user_cast = g_strdup_printf("%s: ", nick);
