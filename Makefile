@@ -20,9 +20,9 @@
 # SOFTWARE.
 #
 
-CFLAGS := $(shell pkg-config --cflags purple) -fPIC -O2 -pipe -Wall -pedantic
+CFLAGS := $(shell pkg-config --cflags pidgin) -fPIC -O2 -Wall -pedantic -pipe
 LDFLAGS := -shared
-LIBS := $(shell pkg-config --libs purple)
+LIBS := $(shell pkg-config --libs pidgin)
 
 SOURCES := $(wildcard *.c)
 OBJECTS := $(patsubst %.c,%.o,$(SOURCES))
