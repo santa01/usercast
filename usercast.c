@@ -67,7 +67,7 @@ conversation_nick_clicked(PurpleConversation* conv, gchar* nick, guint button)
 
         if (second_click - first_click <= double_click_time)
         {
-            user_cast = g_strdup_printf("%s: ", nick);
+            user_cast = g_strdup_printf("%s, ", nick);
             gtk_text_buffer_insert_at_cursor(PIDGIN_CONVERSATION(conv)->entry_buffer, user_cast, -1);
             g_free(user_cast);
 
