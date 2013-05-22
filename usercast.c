@@ -97,7 +97,7 @@ static gboolean
 plugin_load(PurplePlugin *plugin)
 {
     GdkScreen* default_screen = NULL;
-    GValue gtk_double_click_time;
+    GValue gtk_double_click_time = G_VALUE_INIT;
 
     if (!(default_screen = gdk_screen_get_default()))
     {
@@ -106,8 +106,10 @@ plugin_load(PurplePlugin *plugin)
     }
 
     /* FIXME: Never TRUE in KDE4 */
+    g_value_init(&gtk_double_click_time, G_TYPE_INT);
     if (gdk_screen_get_setting(default_screen, "gtk-double-click-time", &gtk_double_click_time))
         double_click_time = g_value_get_int(&gtk_double_click_time);
+    g_value_unset(&gtk_double_click_time);
 
     purple_debug_info(USERCAST_PLUGIN_NAME, "Double click time is %d ms\n", double_click_time);
 
