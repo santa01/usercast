@@ -32,16 +32,12 @@
 #include <version.h>
 #include <debug.h>
 
-static gint double_click_time = 400;
-static GTimeVal click_time = { 0, 0 };
-
 static gboolean
 conversation_nick_clicked(PurpleConversation* conv, gchar* nick, guint button)
 {
     GdkEvent* next_event = NULL;
     gchar* user_cast = NULL;
-    glong first_click = 0;
-    glong second_click = 0;
+    gint event_timeout = 100; /* milliseconds */
 
     if (purple_conversation_get_type(conv) != PURPLE_CONV_TYPE_CHAT)
     {
@@ -59,60 +55,35 @@ conversation_nick_clicked(PurpleConversation* conv, gchar* nick, guint button)
     if (button != 1)
         return FALSE;
 
-    if (click_time.tv_sec != 0 && click_time.tv_usec != 0)
+    /* Wait for either GDK_2BUTTON_EVENT or something else to arrive */
+    for (; event_timeout > 0; event_timeout--)
     {
-        first_click = click_time.tv_sec * 1000 + click_time.tv_usec / 1000;
-        g_get_current_time(&click_time);
-        second_click = click_time.tv_sec * 1000 + click_time.tv_usec / 1000;
-
-        if (second_click - first_click <= double_click_time)
-        {
-            user_cast = g_strdup_printf("%s, ", nick);
-            gtk_text_buffer_insert_at_cursor(PIDGIN_CONVERSATION(conv)->entry_buffer, user_cast, -1);
-            g_free(user_cast);
-
-            purple_debug_info(USERCAST_PLUGIN_NAME, "Casted user `%s' to `%s'\n", nick, conv->name);
-
-            while (!(next_event = gdk_event_peek()))
-                g_usleep(1000);
-
-            /* Pingin handles GDK_2BUTTON_PRESS separately, make it stop */
-            if (next_event->type == GDK_2BUTTON_PRESS)
-            {
-                gdk_event_free(next_event);
-                gdk_event_free(gdk_event_get());
-            }
-        }
-
-        click_time.tv_sec = 0;
-        click_time.tv_usec = 0;
+        if ((next_event = gdk_event_peek()))
+            break;
+        g_usleep(1000); /* 1 millisecond */
     }
-    else
-        g_get_current_time(&click_time);
 
-    return TRUE;
+    /* Pingin handles GDK_2BUTTON_PRESS separately */
+    if (next_event && next_event->type == GDK_2BUTTON_PRESS)
+    {
+        /* Remove GDK_2BUTTON_PRESS from event queue */
+        gdk_event_free(next_event);
+        gdk_event_free(gdk_event_get());
+
+        user_cast = g_strdup_printf("%s, ", nick);
+        gtk_text_buffer_insert_at_cursor(PIDGIN_CONVERSATION(conv)->entry_buffer, user_cast, -1);
+        g_free(user_cast);
+
+        purple_debug_info(USERCAST_PLUGIN_NAME, "Casted user `%s' to `%s'\n", nick, conv->name);
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 static gboolean
 plugin_load(PurplePlugin *plugin)
 {
-    GdkScreen* default_screen = NULL;
-    GValue gtk_double_click_time = G_VALUE_INIT;
-
-    if (!(default_screen = gdk_screen_get_default()))
-    {
-        purple_debug_error(USERCAST_PLUGIN_NAME, "Cannot obtain default screen\n");
-        return FALSE;
-    }
-
-    /* FIXME: Never TRUE in KDE4 */
-    g_value_init(&gtk_double_click_time, G_TYPE_INT);
-    if (gdk_screen_get_setting(default_screen, "gtk-double-click-time", &gtk_double_click_time))
-        double_click_time = g_value_get_int(&gtk_double_click_time);
-    g_value_unset(&gtk_double_click_time);
-
-    purple_debug_info(USERCAST_PLUGIN_NAME, "Double click time is %d ms\n", double_click_time);
-
     purple_signal_connect(pidgin_conversations_get_handle(), "chat-nick-clicked",
                           plugin, PURPLE_CALLBACK(conversation_nick_clicked), NULL);
     return TRUE;
