@@ -8,4 +8,6 @@ pastes it into a conversation's entry field. Plugin requires pidgin development
 package to be installed (which usually pulls is libpurple dev package, as well
 as glib and gtk+).
 
+If you are interested in the plugin, you can contact me via santa.ssh@gmail.com
+
 The plugin is licensed under MIT license, see COPYING for details.
