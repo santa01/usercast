@@ -24,7 +24,7 @@
 
 #define USERCAST_PLUGIN_ID      "core-usercast"
 #define USERCAST_PLUGIN_NAME    "usercast"
-#define USERCAST_PLUGIN_VERSION "0.0.1"
+#define USERCAST_PLUGIN_VERSION "0.1.0"
 
 #include <conversation.h>
 #include <signals.h>
