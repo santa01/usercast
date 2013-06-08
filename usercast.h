@@ -30,10 +30,10 @@
 #define USERCAST_PLUGIN_VERSION         "0.1.1"
 
 #define USERCAST_CONF_ROOT              "/plugins/core/usercast"
-#define USERCAST_CONF_PREFIX            "/plugins/core/usercast/prefix"
-#define USERCAST_CONF_POSTFIX           "/plugins/core/usercast/postfix"
-#define USERCAST_CONF_PREFIX_POLICY     "/plugins/core/usercast/prefix_policy"
-#define USERCAST_CONF_POSTFIX_POLICY    "/plugins/core/usercast/postfix_policy"
+#define USERCAST_CONF_PREFIX            USERCAST_CONF_ROOT"/prefix"
+#define USERCAST_CONF_POSTFIX           USERCAST_CONF_ROOT"/postfix"
+#define USERCAST_CONF_PREFIX_POLICY     USERCAST_CONF_ROOT"/prefix_policy"
+#define USERCAST_CONF_POSTFIX_POLICY    USERCAST_CONF_ROOT"/postfix_policy"
 
 typedef enum {
     POLICY_ALWAYS,
