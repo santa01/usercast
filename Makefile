@@ -35,6 +35,7 @@ $(TARGET): $(OBJECTS)
 	$(CC) $(CFLAGS) $(LIBS) $< -o $@ $(LDFLAGS)
 
 install: $(TARGET)
+	mkdir -p $(PLUGINS)
 	cp $< $(PLUGINS)
 
 clean:
