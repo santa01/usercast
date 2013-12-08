@@ -27,7 +27,7 @@
 
 #define USERCAST_PLUGIN_ID              "core-usercast"
 #define USERCAST_PLUGIN_NAME            "Usercast"
-#define USERCAST_PLUGIN_VERSION         "0.2.1"
+#define USERCAST_PLUGIN_VERSION         "0.2.2"
 
 #define USERCAST_CONF_ROOT              "/plugins/core/usercast"
 #define USERCAST_CONF_PREFIX            USERCAST_CONF_ROOT"/prefix"
