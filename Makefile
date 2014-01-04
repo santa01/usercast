@@ -24,19 +24,21 @@ CFLAGS := $(shell pkg-config --cflags pidgin) -fPIC -O2 -Wall -pedantic -pipe
 LDFLAGS := -shared
 LIBS := $(shell pkg-config --libs pidgin)
 
-SOURCES := $(wildcard *.c)
-OBJECTS := $(patsubst %.c,%.o,$(SOURCES))
 TARGET := usercast.so
-PLUGINS := /usr/lib/pidgin
+PREFIX := /usr/local
+LIBDIR := $(PREFIX)/lib
+
+SOURCES := $(wildcard *.c)
+OBJECTS := $(patsubst %.c, %.o, $(SOURCES))
 
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
-	$(CC) $(CFLAGS) $(LIBS) $< -o $@ $(LDFLAGS)
+	$(CC) $(CFLAGS) $(LIBS) $^ -o $@ $(LDFLAGS)
 
 install: $(TARGET)
-	mkdir -p $(PLUGINS)
-	cp $< $(PLUGINS)
+	mkdir -p $(DESTDIR)/$(LIBDIR)/pidgin
+	cp $^ $(DESTDIR)/$(LIBDIR)/pidgin
 
 clean:
 	rm -f $(OBJECTS) $(TARGET)
